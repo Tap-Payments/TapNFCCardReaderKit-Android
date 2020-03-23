@@ -1,0 +1,3 @@
+rootProject.name='TapNFCCardReaderKit'
+include ':app'
+include ':nfcreader'
