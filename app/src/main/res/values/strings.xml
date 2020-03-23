@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TapNFCCardReaderKit</string>
+    <string name="reading">Reading in progress</string>
 </resources>
