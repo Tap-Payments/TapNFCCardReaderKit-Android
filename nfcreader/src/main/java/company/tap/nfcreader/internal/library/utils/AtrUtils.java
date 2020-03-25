@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
 
+import company.tap.nfcreader.R;
 import company.tap.nfcreader.internal.library.log.Logger;
 import company.tap.nfcreader.internal.library.log.LoggerFactory;
 
@@ -53,7 +54,7 @@ public final class AtrUtils {
 		BufferedReader br = null;
 
 		try {
-			is = AtrUtils.class.getResourceAsStream("/smartcard_list.txt");
+			is = AtrUtils.class.getResourceAsStream("/res/raw/smartcard_list.txt");
 			isr = new InputStreamReader(is, UTF_8);
 			br = new BufferedReader(isr);
 
