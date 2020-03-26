@@ -12,7 +12,6 @@ import java.util.concurrent.Callable;
 
 import company.tap.nfcreader.internal.library.log.Logger;
 import company.tap.nfcreader.internal.library.log.LoggerFactory;
-import company.tap.nfcreader.internal.library.model.EmvCard;
 import company.tap.nfcreader.internal.library.parser.EmvParser;
 import company.tap.nfcreader.internal.library.utils.AtrUtils;
 import company.tap.nfcreader.internal.library.utils.BytesUtils;
@@ -87,7 +86,7 @@ public class TapNfcCardReader {
      * @throws WrongTagTech         thrown when this NFC tech is not supported:
      *                              not enumerated in {@link Tag#getTechList}.
      */
-    public EmvCard readCardBlocking(Intent intent)
+    public TapEmvCard readCardBlocking(Intent intent)
             throws IOException, WrongIntentException, WrongTagTech {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         if (tag == null) {
@@ -104,7 +103,7 @@ public class TapNfcCardReader {
             provider.setmTagCom(tagComm);
 
             EmvParser parser = new EmvParser(provider, true);
-            final EmvCard emvCard = parser.readEmvCard();
+            final TapEmvCard emvCard = parser.readEmvCard();
 
             emvCard.setAtrDescription(extractAtsDescription(tagComm));
             return emvCard;
@@ -139,7 +138,7 @@ public class TapNfcCardReader {
      *
      * @param intent intent with initial card information.
      */
-    public Single<EmvCard> readCardRx1(final Intent intent) {
+    public Single<TapEmvCard> readCardRx1(final Intent intent) {
         return readCardRx1(intent, Schedulers.io());
     }
 
@@ -154,11 +153,11 @@ public class TapNfcCardReader {
      * @param intent    intent with initial card information.
      * @param scheduler scheduler for operating
      */
-    public Single<EmvCard> readCardRx1(final Intent intent, Scheduler scheduler) {
+    public Single<TapEmvCard> readCardRx1(final Intent intent, Scheduler scheduler) {
         return Single
-                .fromCallable(new Callable<EmvCard>() {
+                .fromCallable(new Callable<TapEmvCard>() {
                     @Override
-                    public EmvCard call() throws Exception {
+                    public TapEmvCard call() throws Exception {
                         return readCardBlocking(intent);
                     }
                 })
@@ -175,7 +174,7 @@ public class TapNfcCardReader {
      *
      * @param intent intent with initial card information.
      */
-    public io.reactivex.Single<EmvCard> readCardRx2(final Intent intent) {
+    public io.reactivex.Single<TapEmvCard> readCardRx2(final Intent intent) {
         return readCardRx2(intent, io.reactivex.schedulers.Schedulers.io());
     }
 
@@ -190,11 +189,11 @@ public class TapNfcCardReader {
      * @param intent    intent with initial card information.
      * @param scheduler scheduler for operating
      */
-    public io.reactivex.Single<EmvCard> readCardRx2(final Intent intent, io.reactivex.Scheduler scheduler) {
+    public io.reactivex.Single<TapEmvCard> readCardRx2(final Intent intent, io.reactivex.Scheduler scheduler) {
         return io.reactivex.Single.
-                fromCallable(new Callable<EmvCard>() {
+                fromCallable(new Callable<TapEmvCard>() {
                     @Override
-                    public EmvCard call() throws Exception {
+                    public TapEmvCard call() throws Exception {
                         return readCardBlocking(intent);
                     }
                 })

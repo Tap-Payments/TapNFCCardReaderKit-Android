@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 import company.tap.nfcreader.internal.library.iso7816emv.EmvTags;
 import company.tap.nfcreader.internal.library.log.Logger;
 import company.tap.nfcreader.internal.library.log.LoggerFactory;
-import company.tap.nfcreader.internal.library.model.EmvCard;
+import company.tap.nfcreader.open.reader.TapEmvCard;
 import company.tap.nfcreader.internal.library.model.Service;
 
 
@@ -56,7 +56,7 @@ public final class TrackUtils {
 	 *            data to parse
 	 * @return true if the extraction succeed false otherwise
 	 */
-	public static boolean extractTrack2Data(final EmvCard pEmvCard, final byte[] pData) {
+	public static boolean extractTrack2Data(final TapEmvCard pEmvCard, final byte[] pData) {
 		boolean ret = false;
 		byte[] track2 = TlvUtil.getValue(pData, EmvTags.TRACK_2_EQV_DATA, EmvTags.TRACK2_DATA);
 

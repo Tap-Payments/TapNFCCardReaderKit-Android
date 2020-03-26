@@ -2,15 +2,20 @@ package company.tap.tapnfccardreaderkit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.widget.TextView;
 
-import company.tap.nfcreader.internal.library.model.EmvCard;
+import company.tap.nfcreader.open.reader.TapEmvCard;
 import company.tap.nfcreader.open.reader.TapNfcCardReader;
 import company.tap.nfcreader.open.utils.TapCardUtils;
+import company.tap.nfcreader.open.utils.TapNfcUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
@@ -31,7 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        tapNfcCardReader.enableDispatch();
+        if (TapNfcUtils.isNfcAvailable(this)) {
+            if (TapNfcUtils.isNfcEnabled(this))
+                tapNfcCardReader.enableDispatch();
+            else
+                enableNFC();
+        } else
+            textView.setText(R.string.nfc_not_supported);
         super.onResume();
     }
 
@@ -56,7 +67,19 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private void showCardInfo(EmvCard emvCard) {
+    private void enableNFC() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(getString(R.string.msg_info));
+        alertDialog.setMessage(getString(R.string.enable_nfc));
+        alertDialog.setPositiveButton(getString(R.string.msg_ok), (dialog, which) -> {
+            dialog.dismiss();
+            startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
+        });
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+    }
+
+    private void showCardInfo(TapEmvCard emvCard) {
         String text = TextUtils.join("\n", new Object[]{
                 TapCardUtils.formatCardNumber(emvCard.getCardNumber(), emvCard.getType()),
                 DateFormat.format("M/y", emvCard.getExpireDate()),

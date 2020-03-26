@@ -6,8 +6,6 @@ import company.tap.nfcreader.internal.library.enums.EmvCardScheme;
 
 /**
  * Utils class for card
- *
- * @author Millau Julien
  */
 public class TapCardUtils {
 

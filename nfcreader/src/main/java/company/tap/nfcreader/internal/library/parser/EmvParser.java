@@ -32,7 +32,7 @@ import company.tap.nfcreader.internal.library.iso7816emv.TagAndLength;
 import company.tap.nfcreader.internal.library.log.Logger;
 import company.tap.nfcreader.internal.library.log.LoggerFactory;
 import company.tap.nfcreader.internal.library.model.Afl;
-import company.tap.nfcreader.internal.library.model.EmvCard;
+import company.tap.nfcreader.open.reader.TapEmvCard;
 import company.tap.nfcreader.internal.library.model.EmvTransactionRecord;
 import company.tap.nfcreader.internal.library.model.enums.CurrencyEnum;
 import company.tap.nfcreader.internal.library.utils.BytesUtils;
@@ -89,7 +89,7 @@ public class EmvParser {
 	/**
 	 * Card data
 	 */
-	private EmvCard card;
+	private TapEmvCard card;
 
 	/**
 	 * Constructor
@@ -102,7 +102,7 @@ public class EmvParser {
 	public EmvParser(final IProvider pProvider, final boolean pContactLess) {
 		provider = pProvider;
 		contactLess = pContactLess;
-		card = new EmvCard();
+		card = new TapEmvCard();
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class EmvParser {
 	 *
 	 * @return data read from card or null if any provider match the card type
 	 */
-	public EmvCard readEmvCard() throws CommunicationException {
+	public TapEmvCard readEmvCard() throws CommunicationException {
 		// use PSE first
 		if (!readWithPSE()) {
 			// Find with AID
@@ -574,7 +574,7 @@ public class EmvParser {
 	 *
 	 * @return the card
 	 */
-	public EmvCard getCard() {
+	public TapEmvCard getCard() {
 		return card;
 	}
 

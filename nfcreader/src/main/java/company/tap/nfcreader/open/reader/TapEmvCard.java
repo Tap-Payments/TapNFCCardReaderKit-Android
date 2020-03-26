@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package company.tap.nfcreader.internal.library.model;
+package company.tap.nfcreader.open.reader;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import company.tap.nfcreader.internal.library.enums.EmvCardScheme;
+import company.tap.nfcreader.internal.library.model.AbstractData;
+import company.tap.nfcreader.internal.library.model.EmvTransactionRecord;
+import company.tap.nfcreader.internal.library.model.Service;
 
 /**
  * Bean used to describe data in EMV card
- *
- * @author MILLAU Julien
- *
  */
-public class EmvCard extends AbstractData {
+public class TapEmvCard extends AbstractData {
 
 	/**
 	 * Generated serial UID
@@ -248,7 +248,7 @@ public class EmvCard extends AbstractData {
 
 	@Override
 	public boolean equals(final Object arg0) {
-		return arg0 instanceof EmvCard && cardNumber != null && cardNumber.equals(((EmvCard) arg0).getCardNumber());
+		return arg0 instanceof TapEmvCard && cardNumber != null && cardNumber.equals(((TapEmvCard) arg0).getCardNumber());
 	}
 
 	/**

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">TapNFCCardReaderKit</string>
     <string name="reading">Reading in progress</string>
+    <string name="nfc_not_supported">This device doesn\'t support NFC</string>
+    <string name="enable_nfc">Please enable NFC</string>
+    <string name="msg_info">Info</string>
+    <string name="msg_ok">Ok</string>
 </resources>
