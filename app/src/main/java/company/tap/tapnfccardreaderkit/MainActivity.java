@@ -1,16 +1,19 @@
 package company.tap.tapnfccardreaderkit;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import company.tap.nfcreader.open.reader.TapEmvCard;
 import company.tap.nfcreader.open.reader.TapNfcCardReader;
@@ -25,39 +28,66 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView;
     private TapNfcCardReader tapNfcCardReader;
     private Disposable cardReadDisposable = Disposables.empty();
+    private LinearLayout cardreadContent;
+    private TextView putcardContent;
+    private TextView cardnumberText;
+    private TextView expiredateText;
+    private TextView cardType;
+    TextView noNfcText;
+    private ProgressDialog mProgressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         tapNfcCardReader = new TapNfcCardReader(this);
         textView = findViewById(R.id.text);
+        noNfcText = findViewById(android.R.id.candidatesArea);
+        if (tapNfcCardReader == null)
+            noNfcText.setVisibility(View.VISIBLE);
+        putcardContent = findViewById(R.id.content_putCard);
+        cardreadContent = findViewById(R.id.content_cardReady);
+        cardnumberText = findViewById(android.R.id.text1);
+        expiredateText = findViewById(android.R.id.text2);
+        cardType = findViewById(R.id.text3);
+        createProgressDialog();
     }
 
     @Override
     protected void onResume() {
         if (TapNfcUtils.isNfcAvailable(this)) {
-            if (TapNfcUtils.isNfcEnabled(this))
+            if (TapNfcUtils.isNfcEnabled(this)) {
                 tapNfcCardReader.enableDispatch();
-            else
+                putcardContent.setVisibility(View.VISIBLE);
+            } else
                 enableNFC();
-        } else
-            textView.setText(R.string.nfc_not_supported);
+        } else {
+            putcardContent.setVisibility(View.GONE);
+            cardreadContent.setVisibility(View.GONE);
+            noNfcText.setVisibility(View.VISIBLE);
+        }
         super.onResume();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        mProgressDialog.show();
         if (tapNfcCardReader.isSuitableIntent(intent)) {
             textView.setText(R.string.reading);
+            textView.setVisibility(View.VISIBLE);
             cardReadDisposable = tapNfcCardReader
                     .readCardRx2(intent)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             this::showCardInfo,
                             throwable -> displayError(throwable.getMessage()));
+            mProgressDialog.dismiss();
         }
+
     }
 
     @Override
@@ -68,15 +98,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void enableNFC() {
+        noNfcText.setVisibility(View.VISIBLE);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(getString(R.string.msg_info));
         alertDialog.setMessage(getString(R.string.enable_nfc));
         alertDialog.setPositiveButton(getString(R.string.msg_ok), (dialog, which) -> {
+            noNfcText.setVisibility(View.GONE);
             dialog.dismiss();
             startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
         });
+        alertDialog.setNegativeButton(getString(R.string.msg_dismiss), (dialog, which) -> {
+            dialog.dismiss();
+            onBackPressed();
+        });
         alertDialog.setCancelable(false);
         alertDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (cardreadContent.isShown()) {
+            putcardContent.setVisibility(View.VISIBLE);
+            cardreadContent.setVisibility(View.GONE);
+        } else super.onBackPressed();
+
     }
 
     private void showCardInfo(TapEmvCard emvCard) {
@@ -88,11 +133,28 @@ public class MainActivity extends AppCompatActivity {
                 emvCard.getAtrDescription(),
                 "---",
                 emvCard.toString().replace(", ", ",\n")
+
+
         });
-        textView.setText(text);
+        Log.e("showCardInfo:", text);
+        putcardContent.setVisibility(View.GONE);
+        cardreadContent.setVisibility(View.VISIBLE);
+        cardnumberText.setText(emvCard.getCardNumber());
+        expiredateText.setText(DateFormat.format("M/y", emvCard.getExpireDate()));
+        cardType.setText(emvCard.getApplicationLabel());
     }
 
     private void displayError(String message) {
         textView.setText(message);
+    }
+
+    private void createProgressDialog() {
+        String title = getResources().getString(R.string.ad_progressBar_title);
+        String mess = getString(R.string.ad_progressBar_mess);
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle(title);
+        mProgressDialog.setMessage(mess);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(false);
     }
 }
