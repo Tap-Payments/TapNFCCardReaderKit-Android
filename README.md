@@ -93,7 +93,8 @@ iii. **tapNfcCardReader.enableDispatch()** Activates NFC using TapNfcCardReader 
 
 i. **tapNfcCardReader.isSuitableIntent(intent)** checks if the intent or scanned data is good readable
 
-ii. Declare  **Disposable**
+ii. Declare  **Disposable** The Disposable is holding the refence of the observing process
+its used to prevent memory leak.
  ```
   private Disposable cardReadDisposable = Disposables.empty();
   ```
