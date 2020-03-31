@@ -10,8 +10,4 @@
     <string name="tv_tapYourCard">Please put your card to back panel of the phone</string>
     <string name="ad_progressBar_title">Scanning ...</string>
     <string name="ad_progressBar_mess">Please do not remove or move card during reading.</string>
-    <string name="ad_nfcTurnOn_title">NFC is turned off.</string>
-    <string name="ad_nfcTurnOn_message">You need turn on NFC module for scanning. Wish turn on it now?</string>
-    <string name="ad_nfcTurnOn_pos">Turn on</string>
-    <string name="ad_nfcTurnOn_neg">Dismiss</string>
 </resources>

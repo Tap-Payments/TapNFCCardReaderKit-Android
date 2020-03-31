@@ -25,11 +25,10 @@ import io.reactivex.disposables.Disposables;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView textView;
     private TapNfcCardReader tapNfcCardReader;
     private Disposable cardReadDisposable = Disposables.empty();
     private LinearLayout cardreadContent;
-    private TextView putcardContent;
+    private TextView scancardContent;
     private TextView cardnumberText;
     private TextView expiredateText;
     private TextView cardType;
@@ -41,14 +40,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         tapNfcCardReader = new TapNfcCardReader(this);
-        textView = findViewById(R.id.text);
         noNfcText = findViewById(android.R.id.candidatesArea);
         if (tapNfcCardReader == null)
             noNfcText.setVisibility(View.VISIBLE);
-        putcardContent = findViewById(R.id.content_putCard);
+        scancardContent = findViewById(R.id.content_putCard);
         cardreadContent = findViewById(R.id.content_cardReady);
         cardnumberText = findViewById(android.R.id.text1);
         expiredateText = findViewById(android.R.id.text2);
@@ -60,12 +58,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         if (TapNfcUtils.isNfcAvailable(this)) {
             if (TapNfcUtils.isNfcEnabled(this)) {
-                tapNfcCardReader.enableDispatch();
-                putcardContent.setVisibility(View.VISIBLE);
+                tapNfcCardReader.enableDispatch();//Activates NFC  to read NFC Card details .
+                scancardContent.setVisibility(View.VISIBLE);
             } else
                 enableNFC();
         } else {
-            putcardContent.setVisibility(View.GONE);
+            scancardContent.setVisibility(View.GONE);
             cardreadContent.setVisibility(View.GONE);
             noNfcText.setVisibility(View.VISIBLE);
         }
@@ -77,15 +75,14 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         mProgressDialog.show();
         if (tapNfcCardReader.isSuitableIntent(intent)) {
-            textView.setText(R.string.reading);
-            textView.setVisibility(View.VISIBLE);
+            mProgressDialog.show();
             cardReadDisposable = tapNfcCardReader
                     .readCardRx2(intent)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             this::showCardInfo,
                             throwable -> displayError(throwable.getMessage()));
-            mProgressDialog.dismiss();
+
         }
 
     }
@@ -118,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (cardreadContent.isShown()) {
-            putcardContent.setVisibility(View.VISIBLE);
+            scancardContent.setVisibility(View.VISIBLE);
             cardreadContent.setVisibility(View.GONE);
         } else super.onBackPressed();
 
@@ -133,19 +130,18 @@ public class MainActivity extends AppCompatActivity {
                 emvCard.getAtrDescription(),
                 "---",
                 emvCard.toString().replace(", ", ",\n")
-
-
         });
         Log.e("showCardInfo:", text);
-        putcardContent.setVisibility(View.GONE);
+        scancardContent.setVisibility(View.GONE);
         cardreadContent.setVisibility(View.VISIBLE);
         cardnumberText.setText(emvCard.getCardNumber());
         expiredateText.setText(DateFormat.format("M/y", emvCard.getExpireDate()));
         cardType.setText(emvCard.getApplicationLabel());
+        mProgressDialog.dismiss();
     }
 
     private void displayError(String message) {
-        textView.setText(message);
+        noNfcText.setText(message);
     }
 
     private void createProgressDialog() {
