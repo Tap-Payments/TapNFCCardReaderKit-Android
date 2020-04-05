@@ -16,27 +16,27 @@ To use the SDK the following requirements must be met:
 # Installation
 ---
 <a name="include_library_to_code_locally"></a>
-### Include goSellSDK library as a dependency module in your project
+### Include TapNFCCardReaderKit library as a dependency module in your project
 ---
-1. Clone goSellSDK library from Tap repository
+1. Clone TapNFCCardReaderKit library from Tap repository
    ```
        git@github.com:Tap-Payments/TapNFCCardReaderKit-Android.git
     ```
-2. Add goSellSDK library to your project settings.gradle file as following
+2. Add TapNFCCardReaderKit library to your project settings.gradle file as following
     ```java
-        include ':library', ':YourAppName'
+        include ':nfcreader', ':YourAppName'
     ```
 3. Setup your project to include goSellSDK as a dependency Module.
    1. File -> Project Structure -> Modules -> << your project name >>
    2. Dependencies -> click on **+** icon in the screen bottom -> add Module Dependency
-   3. select goSellSDK library
+   3. select nfcreader library
 
 <a name="installation_with_jitpack"></a>
 ### Installation with JitPack
 ---
 [JitPack](https://jitpack.io/) is a novel package repository for JVM and Android projects. It builds Git projects on demand and provides you with ready-to-use artifacts (jar, aar).
 
-To integrate goSellSDK into your project add it in your **root** `build.gradle` at the end of repositories:
+To integrate nfcreader into your project add it in your **root** `build.gradle` at the end of repositories:
 ```java
 	allprojects {
 		repositories {
