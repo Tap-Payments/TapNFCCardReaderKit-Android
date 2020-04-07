@@ -6,10 +6,16 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 
+import com.flurry.android.FlurryAgent;
+
 import java.io.IOException;
 import java.util.Collection;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
+import company.tap.nfcreader.internal.AnalyticsHelper;
 import company.tap.nfcreader.internal.library.log.Logger;
 import company.tap.nfcreader.internal.library.log.LoggerFactory;
 import company.tap.nfcreader.internal.library.parser.EmvParser;
@@ -19,6 +25,8 @@ import company.tap.nfcreader.open.utils.TapNfcUtils;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
+
+import static company.tap.nfcreader.internal.AnalyticsHelper.EVENT_INTENT;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class TapNfcCardReader {
@@ -30,6 +38,12 @@ public class TapNfcCardReader {
         tapNfcUtils = new TapNfcUtils(activity);
         provider = new TapNfcProvider();
         logger = LoggerFactory.getLogger(TapNfcCardReader.class);
+        String app_name = activity.getApplicationInfo().loadLabel(activity.getPackageManager()).toString();
+        // Capture author info & user status
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("sdkVersion", "1.0");
+        parameters.put("clientApp",app_name);
+        AnalyticsHelper.logEvent(AnalyticsHelper.APP_DETAILS,parameters,true);
     }
 
     /**
@@ -58,7 +72,9 @@ public class TapNfcCardReader {
             logger.debug("No TAG in intent");
             return false;
         }
-
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("intent", String.valueOf(intent));
+        AnalyticsHelper.logEvent(EVENT_INTENT,parameters,true);
         IsoDep tagComm = IsoDep.get(tag);
         if (tagComm == null) {
             logger.debug("IsoDep was not enumerated in getTechList()");
@@ -111,7 +127,6 @@ public class TapNfcCardReader {
             tagComm.close();
         }
     }
-
     /**
      * Get ATS from isoDep and find matching description
      */
@@ -127,7 +142,6 @@ public class TapNfcCardReader {
         }
         return AtrUtils.getDescriptionFromAts(BytesUtils.bytesToString(pAts));
     }
-
     /**
      * Read card data from given intent.
      * <p>Intent by itself does not contain all data. It contains metadata of NFC card.
