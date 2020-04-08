@@ -11,7 +11,7 @@ import java.util.Map;
  * All rights reserved.
  **/
 public class AnalyticsHelper {
-    public static final String EVENT_INTENT = "read_intent";
+    public static final String EVENT_INTENT = "cameraIntentcall";
     public static final String APP_DETAILS = "AppDetails";
     /**
      * Logs an event for analytics.

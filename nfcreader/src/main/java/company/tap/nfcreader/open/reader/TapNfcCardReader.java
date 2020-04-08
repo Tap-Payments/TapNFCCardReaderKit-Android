@@ -40,10 +40,9 @@ public class TapNfcCardReader {
         provider = new TapNfcProvider();
         logger = LoggerFactory.getLogger(TapNfcCardReader.class);
         String app_name = activity.getApplicationInfo().loadLabel(activity.getPackageManager()).toString();
-        // Capture author info & user status
+        // Capture sdkVersion info
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("sdkVersion", BuildConfig.VERSION_NAME);
-        parameters.put("clientApp",app_name);
         AnalyticsHelper.logEvent(AnalyticsHelper.APP_DETAILS,parameters,true);
     }
 
