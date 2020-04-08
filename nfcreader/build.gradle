@@ -27,9 +27,9 @@ android {
         consumerProguardFiles 'consumer-rules.pro'
         Properties versionProps = new Properties()
         versionProps.load(new FileInputStream(file('config.properties')))
-        def properties_flurryKey = versionProps['FLURRY_API_KEY']
+        def propertiesFlurrykey = versionProps['FLURRY_API_KEY']
         buildTypes.each {
-            it.buildConfigField 'String', 'FLURRY_API_KEY', properties_flurryKey
+            it.buildConfigField 'String', 'FLURRY_API_KEY', propertiesFlurrykey
         }
     }
 
