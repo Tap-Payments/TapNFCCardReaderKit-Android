@@ -8,8 +8,12 @@ import android.nfc.tech.IsoDep;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
+import company.tap.nfcreader.BuildConfig;
+import company.tap.nfcreader.internal.AnalyticsHelper;
 import company.tap.nfcreader.internal.library.log.Logger;
 import company.tap.nfcreader.internal.library.log.LoggerFactory;
 import company.tap.nfcreader.internal.library.parser.EmvParser;
@@ -19,6 +23,8 @@ import company.tap.nfcreader.open.utils.TapNfcUtils;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
+
+import static company.tap.nfcreader.internal.AnalyticsHelper.EVENT_INTENT;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class TapNfcCardReader {
@@ -30,6 +36,11 @@ public class TapNfcCardReader {
         tapNfcUtils = new TapNfcUtils(activity);
         provider = new TapNfcProvider();
         logger = LoggerFactory.getLogger(TapNfcCardReader.class);
+        String app_name = activity.getApplicationInfo().loadLabel(activity.getPackageManager()).toString();
+        // Capture sdkVersion info
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("sdkVersion", BuildConfig.VERSION_NAME);
+        AnalyticsHelper.logEvent(AnalyticsHelper.APP_DETAILS, parameters, true);
     }
 
     /**
@@ -54,11 +65,16 @@ public class TapNfcCardReader {
      */
     public boolean isSuitableIntent(Intent intent) {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        boolean isSuitable;
         if (tag == null) {
+            isSuitable = false;
             logger.debug("No TAG in intent");
-            return false;
+        } else {
+            isSuitable = true;
         }
-
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("Suitable Intent", String.valueOf(isSuitable));
+        AnalyticsHelper.logEvent(EVENT_INTENT, parameters, true);
         IsoDep tagComm = IsoDep.get(tag);
         if (tagComm == null) {
             logger.debug("IsoDep was not enumerated in getTechList()");
