@@ -6,7 +6,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 
-import com.flurry.android.FlurryAgent;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -68,12 +67,16 @@ public class TapNfcCardReader {
      */
     public boolean isSuitableIntent(Intent intent) {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        boolean isSuitable;
         if (tag == null) {
+            isSuitable =false;
             logger.debug("No TAG in intent");
             return false;
+        }else{
+            isSuitable=true;
         }
         Map<String, String> parameters = new HashMap<String, String>();
-        parameters.put("intent", String.valueOf(intent));
+        parameters.put("Suitable Intent", String.valueOf(isSuitable));
         AnalyticsHelper.logEvent(EVENT_INTENT,parameters,true);
         IsoDep tagComm = IsoDep.get(tag);
         if (tagComm == null) {
