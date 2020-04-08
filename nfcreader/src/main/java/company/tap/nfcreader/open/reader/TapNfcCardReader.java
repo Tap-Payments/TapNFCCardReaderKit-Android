@@ -6,10 +6,8 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 
-
 import java.io.IOException;
 import java.util.Collection;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -42,7 +40,7 @@ public class TapNfcCardReader {
         // Capture sdkVersion info
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("sdkVersion", BuildConfig.VERSION_NAME);
-        AnalyticsHelper.logEvent(AnalyticsHelper.APP_DETAILS,parameters,true);
+        AnalyticsHelper.logEvent(AnalyticsHelper.APP_DETAILS, parameters, true);
     }
 
     /**
@@ -69,15 +67,14 @@ public class TapNfcCardReader {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         boolean isSuitable;
         if (tag == null) {
-            isSuitable =false;
+            isSuitable = false;
             logger.debug("No TAG in intent");
-            return false;
-        }else{
-            isSuitable=true;
+        } else {
+            isSuitable = true;
         }
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("Suitable Intent", String.valueOf(isSuitable));
-        AnalyticsHelper.logEvent(EVENT_INTENT,parameters,true);
+        AnalyticsHelper.logEvent(EVENT_INTENT, parameters, true);
         IsoDep tagComm = IsoDep.get(tag);
         if (tagComm == null) {
             logger.debug("IsoDep was not enumerated in getTechList()");
@@ -130,6 +127,7 @@ public class TapNfcCardReader {
             tagComm.close();
         }
     }
+
     /**
      * Get ATS from isoDep and find matching description
      */
@@ -145,6 +143,7 @@ public class TapNfcCardReader {
         }
         return AtrUtils.getDescriptionFromAts(BytesUtils.bytesToString(pAts));
     }
+
     /**
      * Read card data from given intent.
      * <p>Intent by itself does not contain all data. It contains metadata of NFC card.
