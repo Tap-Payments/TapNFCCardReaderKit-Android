@@ -6,6 +6,10 @@ import android.util.Log;
 import com.flurry.android.FlurryAgent;
 import com.flurry.android.FlurryPerformance;
 
+import java.util.Properties;
+
+import company.tap.nfcreader.BuildConfig;
+
 
 /**
  * Created by AhlaamK on 4/5/20.
@@ -17,14 +21,14 @@ public class NFCApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        Properties properties = new Properties();
         new FlurryAgent.Builder()
                 .withDataSaleOptOut(false) //CCPA - the default value is false
                 .withCaptureUncaughtExceptions(true)
                 .withIncludeBackgroundSessionsInMetrics(true)
                 .withLogLevel(Log.VERBOSE)
                 .withPerformanceMetrics(FlurryPerformance.ALL)
-                .build(this, "PTT9D949M57SP7WS45MJ");
+                .build(this, BuildConfig.FLURRY_API_KEY);
 
     }
 

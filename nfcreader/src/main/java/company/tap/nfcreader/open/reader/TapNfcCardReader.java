@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import company.tap.nfcreader.BuildConfig;
 import company.tap.nfcreader.internal.AnalyticsHelper;
 import company.tap.nfcreader.internal.library.log.Logger;
 import company.tap.nfcreader.internal.library.log.LoggerFactory;
@@ -41,7 +42,7 @@ public class TapNfcCardReader {
         String app_name = activity.getApplicationInfo().loadLabel(activity.getPackageManager()).toString();
         // Capture author info & user status
         Map<String, String> parameters = new HashMap<String, String>();
-        parameters.put("sdkVersion", "1.0");
+        parameters.put("sdkVersion", BuildConfig.VERSION_NAME);
         parameters.put("clientApp",app_name);
         AnalyticsHelper.logEvent(AnalyticsHelper.APP_DETAILS,parameters,true);
     }
