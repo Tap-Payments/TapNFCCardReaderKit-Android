@@ -1660,8 +1660,6 @@
 	TÃ©cnico Lisboa Student Card (Bank)
 	http://www.tecnico.ulisboa.pt/
 	Other Optelio Card (Santander)
-	Santander Totta Student Card - Portugal (Bank)
-	https://www.santandertotta.pt
 
 3B 68 00 00 81 00 03 50 01 0F 90 00
 	Holvi Payment Master Card (Bank)
@@ -2438,7 +2436,6 @@
 3B 6E 00 00 00 31 C0 71 C6 65 01 B0 01 03 37 83 90 00
 	NatWest (UK) "Business" (MasterCard) credit card
 	NatWest (UK) (Maestro) debit card
-	Santander Totta (Portugal) "JÃ KÃ KONTA" (VISA Electron) debit card
 	ANZ (Australia) (VISA) credit card
 	Millennium BCP (Portugal) (VISA Electron) debit card
 	OpenBank (Spain) (VISA) credit card
@@ -9397,7 +9394,6 @@
 	https://www.tangerine.ca/
 
 3B FF 13 00 FF 80 31 FE 45 53 46 53 45 2D 43 58 33 32 32 2D 56 01 01 01 65
-	Portugal Santander Totta UniversitÃ¡rios "AssociaÃ§Ã£o Academica de Coimbra"
 
 3B FF 13 00 FF 80 31 FE 45 53 46 53 45 2D 43 58 33 32 32 2D 56 18 02 08 76
 	SmartCafe Expert Java
