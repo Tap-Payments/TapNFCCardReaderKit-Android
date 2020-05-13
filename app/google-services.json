@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "318058303970",
+    "firebase_url": "https://tapnfc-kit.firebaseio.com",
+    "project_id": "tapnfc-kit",
+    "storage_bucket": "tapnfc-kit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318058303970:android:d83019d39e3cd6bdd529bb",
+        "android_client_info": {
+          "package_name": "company.tap.tapnfccardreaderkit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "318058303970-npkoiihc9e0eg9m6g60ihb04jrurjcul.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzyfOa_oAxAuxUjNobfFl4xFN6XMrHeso"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "318058303970-npkoiihc9e0eg9m6g60ihb04jrurjcul.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
