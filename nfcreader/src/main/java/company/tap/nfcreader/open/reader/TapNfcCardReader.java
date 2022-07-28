@@ -39,7 +39,7 @@ public class TapNfcCardReader {
         String app_name = activity.getApplicationInfo().loadLabel(activity.getPackageManager()).toString();
         // Capture sdkVersion info
         Map<String, String> parameters = new HashMap<String, String>();
-        parameters.put("sdkVersion", BuildConfig.VERSION_NAME);
+        parameters.put("sdkVersion", "1.0");
         AnalyticsHelper.logEvent(AnalyticsHelper.APP_DETAILS, parameters, true);
     }
 
