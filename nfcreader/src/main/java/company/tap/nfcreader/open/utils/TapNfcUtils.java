@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.IsoDep;
+import android.os.Build;
 
 /**
  * Utils class used to manager NFC Adapter
@@ -80,8 +81,15 @@ public class TapNfcUtils {
 	public TapNfcUtils(final Activity pActivity) {
 		mActivity = pActivity;
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(mActivity);
-		mPendingIntent = PendingIntent.getActivity(mActivity, 0,
-				new Intent(mActivity, mActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			mPendingIntent = PendingIntent.getActivity(mActivity, 0,
+					new Intent(mActivity, mActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
+		}else {
+			mPendingIntent = PendingIntent.getActivity(mActivity, 0,
+					new Intent(mActivity, mActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+		}
+
 	}
 
 	/**
