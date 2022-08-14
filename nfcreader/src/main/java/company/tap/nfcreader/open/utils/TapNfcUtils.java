@@ -84,7 +84,7 @@ public class TapNfcUtils {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			mPendingIntent = PendingIntent.getActivity(mActivity, 0,
-					new Intent(mActivity, mActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_UPDATE_CURRENT);
+					new Intent(mActivity, mActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
 		}else {
 			mPendingIntent = PendingIntent.getActivity(mActivity, 0,
 					new Intent(mActivity, mActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
