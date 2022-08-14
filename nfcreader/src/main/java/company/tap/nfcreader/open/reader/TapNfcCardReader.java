@@ -75,10 +75,17 @@ public class TapNfcCardReader {
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("Suitable Intent", String.valueOf(isSuitable));
         AnalyticsHelper.logEvent(EVENT_INTENT, parameters, true);
-        IsoDep tagComm = IsoDep.get(tag);
-        if (tagComm == null) {
+        if(tag==null){
             logger.debug("IsoDep was not enumerated in getTechList()");
+
             return false;
+        }else{
+            IsoDep tagComm = IsoDep.get(tag);
+
+            if (tagComm == null) {
+                logger.debug("IsoDep was not enumerated in getTechList()");
+                return false;
+            }
         }
 
         return true;
