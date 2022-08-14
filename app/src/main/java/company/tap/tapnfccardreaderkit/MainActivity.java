@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView scancardContent;
     private TextView cardnumberText;
     private TextView expiredateText;
+    private TextView cardHolderNameText;
     private TextView cardType;
     TextView noNfcText;
     private ProgressDialog mProgressDialog;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         cardreadContent = findViewById(R.id.content_cardReady);
         cardnumberText = findViewById(android.R.id.text1);
         expiredateText = findViewById(android.R.id.text2);
+        cardHolderNameText = findViewById(R.id.text4);
         cardType = findViewById(R.id.text3);
         createProgressDialog();
     }
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         cardreadContent.setVisibility(View.VISIBLE);
         cardnumberText.setText(emvCard.getCardNumber());
         expiredateText.setText(DateFormat.format("M/y", emvCard.getExpireDate()));
+        cardHolderNameText.setText(emvCard.getHolderFirstname());
         cardType.setText(emvCard.getApplicationLabel());
         mProgressDialog.dismiss();
     }

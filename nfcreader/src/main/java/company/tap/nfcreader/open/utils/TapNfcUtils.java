@@ -82,13 +82,16 @@ public class TapNfcUtils {
 		mActivity = pActivity;
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(mActivity);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			mPendingIntent = PendingIntent.getActivity(mActivity, 0,
-					new Intent(mActivity, mActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
+					new Intent(mActivity, mActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_UPDATE_CURRENT);
 		}else {
 			mPendingIntent = PendingIntent.getActivity(mActivity, 0,
 					new Intent(mActivity, mActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 		}
+
+	/*	mPendingIntent = PendingIntent.getActivity(mActivity, 0,
+				new Intent(mActivity, mActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);*/
 
 	}
 

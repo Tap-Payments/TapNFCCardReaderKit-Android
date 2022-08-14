@@ -14,12 +14,12 @@ def getVersionName = { ->
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 29
     //buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         versionName getVersionName()
 
@@ -53,6 +53,7 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
     // Required for Flurry Analytics integration
     implementation 'com.flurry.android:analytics:12.2.0@aar'
 }
