@@ -26,6 +26,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static company.tap.nfcreader.internal.AnalyticsHelper.EVENT_INTENT;
 
+import org.apache.commons.io.IOUtils;
+
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class TapNfcCardReader {
     private TapNfcUtils tapNfcUtils;
@@ -109,6 +111,7 @@ public class TapNfcCardReader {
      * @throws WrongTagTech         thrown when this NFC tech is not supported:
      *                              not enumerated in {@link Tag#getTechList}.
      */
+    private byte[] lastAts;
     public TapEmvCard readCardBlocking(Intent intent)
             throws Throwable {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -123,21 +126,40 @@ public class TapNfcCardReader {
 
         try {
             tagComm.connect();
+            lastAts = getAts(tagComm);
             provider.setmTagCom(tagComm);
 
             EmvParser parser = new EmvParser(provider, true);
          final    TapEmvCard emvCard  = parser.readEmvCard();
 
             if (emvCard != null) {
-                emvCard.setAtrDescription(extractAtsDescription(tagComm));
+                emvCard.setAtrDescription(extractAtsDescription2(lastAts));
 
             }
             return emvCard;
         } catch (IOException e) {
             throw Objects.requireNonNull(e.getCause());
         } finally {
-            tagComm.close();
+            IOUtils.closeQuietly(tagComm);
+
+            //tagComm.close();
         }
+    }
+
+    public Collection<String> extractAtsDescription2(final byte[] pAts) {
+        return AtrUtils.getDescriptionFromAts(BytesUtils.bytesToString(pAts));
+    }
+    private byte[] getAts(final IsoDep pIso) {
+        byte[] ret = null;
+        if (pIso.isConnected()) {
+            // Extract ATS from NFC-A
+            ret = pIso.getHistoricalBytes();
+            if (ret == null) {
+                // Extract ATS from NFC-B
+                ret = pIso.getHiLayerResponse();
+            }
+        }
+        return ret;
     }
 
 

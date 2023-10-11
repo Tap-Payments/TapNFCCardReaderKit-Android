@@ -54,6 +54,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'commons-io:commons-io:2.14.0'
     // Required for Flurry Analytics integration
     implementation 'com.flurry.android:analytics:12.2.0@aar'
 }

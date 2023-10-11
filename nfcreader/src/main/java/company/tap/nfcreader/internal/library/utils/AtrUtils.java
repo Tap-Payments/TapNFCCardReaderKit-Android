@@ -117,6 +117,7 @@ public final class AtrUtils {
 	@SuppressWarnings("unchecked")
 	public static final Collection<String> getDescriptionFromAts(final String pAts) {
 		Collection<String> ret = null;
+		System.out.println("pAts"+pAts);
 		if (StringUtils.isNotBlank(pAts)) {
 			System.out.println(">"+pAts);
 			String val = StringUtils.deleteWhitespace(pAts).replaceAll("9000$", "");
