@@ -115,7 +115,7 @@ public final class AtrUtils {
 	@SuppressWarnings("unchecked")
 	public static final Collection<String> getDescriptionFromAts(final String pAts) {
 		Collection<String> ret = null;
-		if (CommonsUtils.isNotBlank(pAts)) {
+		if (pAts != null || !pAts.trim().isEmpty()|| !pAts.trim().isBlank()) {
 			String val = deleteWhitespace(pAts);
 			for (String key : MAP.keySet()) {
 				if (key.contains(val)) { // TODO Fix this
