@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import company.tap.nfcreader.internal.AnalyticsHelper;
@@ -109,7 +110,7 @@ public class TapNfcCardReader {
      *                              not enumerated in {@link Tag#getTechList}.
      */
     public TapEmvCard readCardBlocking(Intent intent)
-            throws IOException, WrongIntentException, WrongTagTech  {
+            throws Throwable {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         if (tag == null) {
             throw new WrongIntentException("No TAG in intent");
@@ -125,14 +126,20 @@ public class TapNfcCardReader {
             provider.setmTagCom(tagComm);
 
             EmvParser parser = new EmvParser(provider, true);
-            final TapEmvCard emvCard = parser.readEmvCard();
+         final    TapEmvCard emvCard  = parser.readEmvCard();
 
-            emvCard.setAtrDescription(extractAtsDescription(tagComm));
+            if (emvCard != null) {
+                emvCard.setAtrDescription(extractAtsDescription(tagComm));
+
+            }
             return emvCard;
+        } catch (IOException e) {
+            throw Objects.requireNonNull(e.getCause());
         } finally {
             tagComm.close();
         }
     }
+
 
     /**
      * Get ATS from isoDep and find matching description
@@ -180,7 +187,11 @@ public class TapNfcCardReader {
                 .fromCallable(new Callable<TapEmvCard>() {
                     @Override
                     public TapEmvCard call() throws Exception {
-                        return readCardBlocking(intent);
+                        try {
+                            return readCardBlocking(intent);
+                        } catch (Throwable e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 })
                 .subscribeOn(scheduler);
@@ -218,7 +229,11 @@ public class TapNfcCardReader {
                 fromCallable(new Callable<TapEmvCard>() {
                     @Override
                     public TapEmvCard call() throws Exception {
-                        return readCardBlocking(intent);
+                        try {
+                            return readCardBlocking(intent);
+                        } catch (Throwable e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 })
                 .subscribeOn(scheduler);

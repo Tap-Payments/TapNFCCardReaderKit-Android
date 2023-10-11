@@ -118,10 +118,15 @@ public final class AtrUtils {
 	public static final Collection<String> getDescriptionFromAts(final String pAts) {
 		Collection<String> ret = null;
 		if (StringUtils.isNotBlank(pAts)) {
+			System.out.println(">"+pAts);
 			String val = StringUtils.deleteWhitespace(pAts).replaceAll("9000$", "");
 			for (String key : MAP.keySet()) {
+				System.out.println("keyy"+key);
+				System.out.println("MAP"+MAP.keySet());
+				System.out.println("val"+val);
 				if (key.contains(val)) { // TODO Fix this
 					ret = (Collection<String>) MAP.get(key);
+					System.out.println("ret"+ret);
 					break;
 				}
 			}
