@@ -29,6 +29,8 @@ import company.tap.nfcreader.internal.library.log.LoggerFactory;
 import static company.tap.nfcreader.internal.library.utils.CommonsUtils.UTF_8;
 import static company.tap.nfcreader.internal.library.utils.CommonsUtils.deleteWhitespace;
 
+import org.apache.commons.lang3.StringUtils;
+
 
 /**
  * Class used to find ATR description
@@ -115,8 +117,8 @@ public final class AtrUtils {
 	@SuppressWarnings("unchecked")
 	public static final Collection<String> getDescriptionFromAts(final String pAts) {
 		Collection<String> ret = null;
-		if (pAts != null || !pAts.trim().isEmpty()|| !pAts.trim().isBlank()) {
-			String val = deleteWhitespace(pAts);
+		if (StringUtils.isNotBlank(pAts)) {
+			String val = StringUtils.deleteWhitespace(pAts).replaceAll("9000$", "");
 			for (String key : MAP.keySet()) {
 				if (key.contains(val)) { // TODO Fix this
 					ret = (Collection<String>) MAP.get(key);
