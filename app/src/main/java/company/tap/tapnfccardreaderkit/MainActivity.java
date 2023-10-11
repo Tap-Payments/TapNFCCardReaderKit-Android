@@ -15,18 +15,23 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.io.IOException;
+import java.net.SocketException;
+
 import company.tap.nfcreader.open.reader.TapEmvCard;
 import company.tap.nfcreader.open.reader.TapNfcCardReader;
 import company.tap.nfcreader.open.utils.TapCardUtils;
 import company.tap.nfcreader.open.utils.TapNfcUtils;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.disposables.Disposables;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.exceptions.UndeliverableException;
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 
 public class MainActivity extends AppCompatActivity {
 
     private TapNfcCardReader tapNfcCardReader;
-    private Disposable cardReadDisposable = Disposables.empty();
+    private Disposable cardReadDisposable = Disposable.empty();
     private LinearLayout cardreadContent;
     private TextView scancardContent;
     private TextView cardnumberText;
@@ -83,7 +88,32 @@ public class MainActivity extends AppCompatActivity {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             this::showCardInfo,
-                            throwable -> displayError(throwable.getMessage()));
+                            throwable -> RxJavaPlugins.setErrorHandler(e -> {
+                                if (e instanceof UndeliverableException) {
+                                    e = e.getCause();
+                                }
+                                if ((e instanceof IOException) || (e instanceof SocketException)) {
+                                    // fine, irrelevant network problem or API that throws on cancellation
+                                    return;
+                                }
+                                if (e instanceof InterruptedException) {
+                                    // fine, some blocking code was interrupted by a dispose call
+                                    return;
+                                }
+                                if ((e instanceof NullPointerException) || (e instanceof IllegalArgumentException)) {
+                                    // that's likely a bug in the application
+                                    System.out.println("eee"+e);
+                                    Thread.currentThread().getUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                                    return;
+                                }
+                                if (e instanceof IllegalStateException) {
+                                    // that's a bug in RxJava or in a custom operator
+                                    Thread.currentThread().getUncaughtExceptionHandler().toString();
+                                          //  .handleException(Thread.currentThread(), e);
+                                    return;
+                                }
+                                Log.e("warn","Undeliverable exception received, not sure what to do", e);
+                            }));
 
         }
 
@@ -91,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+
         cardReadDisposable.dispose();
         tapNfcCardReader.disableDispatch();
         super.onPause();

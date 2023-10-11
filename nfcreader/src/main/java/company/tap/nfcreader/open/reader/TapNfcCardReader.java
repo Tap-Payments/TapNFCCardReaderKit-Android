@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import company.tap.nfcreader.BuildConfig;
 import company.tap.nfcreader.internal.AnalyticsHelper;
 import company.tap.nfcreader.internal.library.log.Logger;
 import company.tap.nfcreader.internal.library.log.LoggerFactory;
@@ -20,9 +19,9 @@ import company.tap.nfcreader.internal.library.parser.EmvParser;
 import company.tap.nfcreader.internal.library.utils.AtrUtils;
 import company.tap.nfcreader.internal.library.utils.BytesUtils;
 import company.tap.nfcreader.open.utils.TapNfcUtils;
-import io.reactivex.Scheduler;
-import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static company.tap.nfcreader.internal.AnalyticsHelper.EVENT_INTENT;
 
@@ -110,7 +109,7 @@ public class TapNfcCardReader {
      *                              not enumerated in {@link Tag#getTechList}.
      */
     public TapEmvCard readCardBlocking(Intent intent)
-            throws IOException, WrongIntentException, WrongTagTech {
+            throws IOException, WrongIntentException, WrongTagTech  {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         if (tag == null) {
             throw new WrongIntentException("No TAG in intent");
@@ -197,9 +196,11 @@ public class TapNfcCardReader {
      *
      * @param intent intent with initial card information.
      */
-    public io.reactivex.Single<TapEmvCard> readCardRx2(final Intent intent) {
-        return readCardRx2(intent, io.reactivex.schedulers.Schedulers.io());
+    public Single<TapEmvCard> readCardRx2(final Intent intent) {
+        return readCardRx2(intent, Schedulers.io());
     }
+
+
 
     /**
      * Read card data from given intent.
@@ -212,8 +213,8 @@ public class TapNfcCardReader {
      * @param intent    intent with initial card information.
      * @param scheduler scheduler for operating
      */
-    public io.reactivex.Single<TapEmvCard> readCardRx2(final Intent intent, io.reactivex.Scheduler scheduler) {
-        return io.reactivex.Single.
+    public Single<TapEmvCard> readCardRx2(final Intent intent, Scheduler scheduler) {
+        return Single.
                 fromCallable(new Callable<TapEmvCard>() {
                     @Override
                     public TapEmvCard call() throws Exception {
@@ -234,4 +235,6 @@ public class TapNfcCardReader {
             super("IsoDep was not enumerated in getTechList()");
         }
     }
+
+
 }
