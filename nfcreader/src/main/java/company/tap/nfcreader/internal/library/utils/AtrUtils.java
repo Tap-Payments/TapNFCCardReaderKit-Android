@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import company.tap.nfcreader.R;
@@ -116,19 +117,29 @@ public final class AtrUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static final Collection<String> getDescriptionFromAts(final String pAts) {
-		Collection<String> ret = null;
-		System.out.println("pAts"+pAts);
+		Collection<String> ret = new ArrayList<String>();
 		if (StringUtils.isNotBlank(pAts)) {
-			System.out.println(">"+pAts);
 			String val = StringUtils.deleteWhitespace(pAts).replaceAll("9000$", "");
 			for (String key : MAP.keySet()) {
-				System.out.println("keyy"+key);
-				System.out.println("MAP"+MAP.keySet());
-				System.out.println("val"+val);
-				if (key.contains(val)) { // TODO Fix this
-					ret = (Collection<String>) MAP.get(key);
-					System.out.println("ret"+ret);
-					break;
+				int j = val.length() - 1;
+				int i = key.length() - 1;
+				while (i >= 0) {
+					if (key.charAt(i) == '.' || key.charAt(i) == val.charAt(j)  ){
+						j--;
+						i--;
+						if (j < 0){
+							if (!key.substring(key.length() - val.length(), key.length()).replace(".", "").isEmpty()){
+								ret.addAll(MAP.get(key));
+							}
+							break;
+						}
+					} else if (j != val.length() - 1) {
+						j = val.length() - 1;
+					} else if (i == key.length() - 1){
+						break;
+					} else {
+						i--;
+					}
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 package company.tap.nfcreader.open.reader;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -14,6 +15,7 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import company.tap.nfcreader.internal.AnalyticsHelper;
+import company.tap.nfcreader.internal.SimpleAsyncTask;
 import company.tap.nfcreader.internal.library.log.Logger;
 import company.tap.nfcreader.internal.library.log.LoggerFactory;
 import company.tap.nfcreader.internal.library.parser.EmvParser;
@@ -27,13 +29,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import static company.tap.nfcreader.internal.AnalyticsHelper.EVENT_INTENT;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class TapNfcCardReader {
     private TapNfcUtils tapNfcUtils;
     private TapNfcProvider provider;
     private Logger logger;
-
+    private TapEmvCard mReadCard;
     public TapNfcCardReader(Activity activity) {
         tapNfcUtils = new TapNfcUtils(activity);
         provider = new TapNfcProvider();
@@ -112,6 +115,7 @@ public class TapNfcCardReader {
      *                              not enumerated in {@link Tag#getTechList}.
      */
     private byte[] lastAts;
+    @SuppressLint("StaticFieldLeak")
     public TapEmvCard readCardBlocking(Intent intent)
             throws Throwable {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -119,12 +123,86 @@ public class TapNfcCardReader {
             throw new WrongIntentException("No TAG in intent");
         }
 
-        IsoDep tagComm = IsoDep.get(tag);
+       /* IsoDep tagComm = IsoDep.get(tag);
         if (tagComm == null) {
             throw new WrongTagTech();
-        }
+        }*/
+        new SimpleAsyncTask() {
+            private TapEmvCard mCard = null;
+            /**
+             * Tag comm
+             */
+            private IsoDep mTagcomm;
 
-        try {
+            /**
+             * Emv Card
+             */
+
+
+
+
+            /**
+             * Boolean to indicate exception
+             */
+            private boolean mException;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+               // provider.getLog().setLength(0);
+                // Toast.makeText(HomeActivity.this, "Reading card", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void doInBackground() {
+
+                mTagcomm = IsoDep.get(tag);
+                if (mTagcomm == null) {
+                    //  Toast.makeText(HomeActivity.this, "Read error", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                mException = false;
+
+                try {
+                  mReadCard  = null;
+                    // Open connection
+                    mTagcomm.connect();
+                    lastAts = getAts(mTagcomm);
+
+                    provider.setmTagCom(mTagcomm);
+
+                    EmvParser parser = new EmvParser(provider, true);
+                    mCard = parser.readEmvCard();
+                    if (mCard != null) {
+                        mCard.setAtrDescription(extractAtsDescription2(lastAts));
+                    }
+
+                } catch (IOException e) {
+                    mException = true;
+                } finally {
+                    // close tagcomm
+                    IOUtils.closeQuietly(mTagcomm);
+                }
+            }
+
+            @Override
+            protected void onPostExecute(final Object result) {
+
+                if (!mException) {
+                    if (mCard != null) {
+                        if (StringUtils.isNotBlank(mCard.getCardNumber())) {
+
+                            mReadCard = mCard;
+                        }
+                    }
+                }
+
+            }
+
+        }.execute();
+
+       /* try {
             tagComm.connect();
             lastAts = getAts(tagComm);
             provider.setmTagCom(tagComm);
@@ -143,7 +221,9 @@ public class TapNfcCardReader {
             IOUtils.closeQuietly(tagComm);
 
             //tagComm.close();
-        }
+        }*/
+        System.out.println("mReadCard"+mReadCard.getCardNumber());
+        return mReadCard;
     }
 
     public Collection<String> extractAtsDescription2(final byte[] pAts) {
