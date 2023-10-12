@@ -123,7 +123,7 @@ public final class AtrUtils {
 	 */
 
 	public static  ArrayList<String> getDescriptionFromAts(final String pAts) {
-		 ret = new ArrayList<>();
+	if(ret!=null) ret = new ArrayList<>();
 		if (StringUtils.isNotBlank(pAts)) {
 			String val = StringUtils.deleteWhitespace(pAts).replaceAll("9000$", "");
 			for (String key : MAP.keySet()) {
