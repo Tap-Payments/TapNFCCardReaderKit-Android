@@ -15,7 +15,7 @@ import company.tap.nfcreader.BuildConfig;
  * Copyright (c) 2020    Tap Payments.
  * All rights reserved.
  **/
-public class NFCApplication extends Application {
+public class NFCApplication extends  Application {
     @Override
     public void onCreate() {
         super.onCreate();

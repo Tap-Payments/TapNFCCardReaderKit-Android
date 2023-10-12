@@ -228,6 +228,7 @@ public class TapNfcCardReader {
     }
 
     public Collection<String> extractAtsDescription2(final byte[] pAts) {
+        System.out.println("pAts[]"+pAts);
         return AtrUtils.getDescriptionFromAts(BytesUtils.bytesToString(pAts));
     }
     private byte[] getAts(final IsoDep pIso) {
