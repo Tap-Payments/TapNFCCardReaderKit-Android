@@ -15,6 +15,7 @@
  */
 package company.tap.nfcreader.open.reader;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -82,7 +83,7 @@ public class TapEmvCard extends AbstractData {
 	/**
 	 * List of Atr description
 	 */
-	private Collection<String> atrDescription;
+	private ArrayList<String> atrDescription;
 
 	/**
 	 * Card services
@@ -275,7 +276,7 @@ public class TapEmvCard extends AbstractData {
 	 *
 	 * @return the atrDescription
 	 */
-	public Collection<String> getAtrDescription() {
+	public ArrayList<String> getAtrDescription() {
 		return atrDescription;
 	}
 
@@ -285,7 +286,7 @@ public class TapEmvCard extends AbstractData {
 	 * @param atrDescription
 	 *            the atrDescription to set
 	 */
-	public void setAtrDescription(final Collection<String> atrDescription) {
+	public void setAtrDescription(final ArrayList<String> atrDescription) {
 		this.atrDescription = atrDescription;
 	}
 

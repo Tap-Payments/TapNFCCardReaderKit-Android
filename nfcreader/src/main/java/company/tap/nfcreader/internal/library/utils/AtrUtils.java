@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Objects;
 
 import company.tap.nfcreader.R;
@@ -31,6 +32,9 @@ import company.tap.nfcreader.internal.library.log.LoggerFactory;
 
 import static company.tap.nfcreader.internal.library.utils.CommonsUtils.UTF_8;
 import static company.tap.nfcreader.internal.library.utils.CommonsUtils.deleteWhitespace;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -42,7 +46,7 @@ import org.apache.commons.lang3.StringUtils;
  * 
  */
 public final class AtrUtils {
-
+	static ArrayList<String> ret = new ArrayList<>();
 	/**
 	 * Class logger
 	 */
@@ -117,9 +121,9 @@ public final class AtrUtils {
 	 *            EMV card ATS
 	 * @return card description
 	 */
-	@SuppressWarnings("unchecked")
-	public static final Collection<String> getDescriptionFromAts(final String pAts) {
-		Collection<String> ret = new ArrayList<String>();
+
+	public static  ArrayList<String> getDescriptionFromAts(final String pAts) {
+		 ret = new ArrayList<>();
 		if (StringUtils.isNotBlank(pAts)) {
 			String val = StringUtils.deleteWhitespace(pAts).replaceAll("9000$", "");
 			for (String key : MAP.keySet()) {
@@ -146,8 +150,8 @@ public final class AtrUtils {
 				}
 			}
 		}
-		if(ret !=null)  return ret;
-		else return Collections.singleton("");
+		return ret;
+
 	}
 
 	/**

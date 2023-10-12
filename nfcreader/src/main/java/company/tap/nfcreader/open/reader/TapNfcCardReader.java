@@ -8,6 +8,7 @@ import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -227,7 +228,7 @@ public class TapNfcCardReader {
         return mReadCard;
     }
 
-    public Collection<String> extractAtsDescription2(final byte[] pAts) {
+    public ArrayList<String> extractAtsDescription2(final byte[] pAts) {
         System.out.println("pAts[]"+pAts);
         return AtrUtils.getDescriptionFromAts(BytesUtils.bytesToString(pAts));
     }
