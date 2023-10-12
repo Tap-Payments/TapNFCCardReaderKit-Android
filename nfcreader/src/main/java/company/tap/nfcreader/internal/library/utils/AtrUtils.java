@@ -141,6 +141,7 @@ public final class AtrUtils {
 						break;
 					} else {
 						i--;
+						break;
 					}
 				}
 			}
