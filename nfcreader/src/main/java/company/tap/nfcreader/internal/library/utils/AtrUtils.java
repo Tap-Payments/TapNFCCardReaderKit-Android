@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
 
 import company.tap.nfcreader.R;
 import company.tap.nfcreader.internal.library.log.Logger;
@@ -129,7 +131,7 @@ public final class AtrUtils {
 						i--;
 						if (j < 0){
 							if (!key.substring(key.length() - val.length(), key.length()).replace(".", "").isEmpty()){
-								ret.addAll(MAP.get(key));
+								ret.addAll(Objects.requireNonNull(MAP.get(key)));
 							}
 							break;
 						}
@@ -143,7 +145,8 @@ public final class AtrUtils {
 				}
 			}
 		}
-		return ret;
+		if(ret !=null)  return ret;
+		else return Collections.singleton("");
 	}
 
 	/**

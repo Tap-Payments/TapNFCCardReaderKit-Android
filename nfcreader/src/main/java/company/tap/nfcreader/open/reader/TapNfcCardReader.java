@@ -175,7 +175,8 @@ public class TapNfcCardReader {
                     EmvParser parser = new EmvParser(provider, true);
                     mCard = parser.readEmvCard();
                     if (mCard != null) {
-                        mCard.setAtrDescription(extractAtsDescription2(lastAts));
+                        if(extractAtsDescription2(lastAts)!=null) mCard.setAtrDescription(extractAtsDescription2(lastAts));
+                        else mCard.setAtrDescription(null);
                     }
 
                 } catch (IOException e) {
