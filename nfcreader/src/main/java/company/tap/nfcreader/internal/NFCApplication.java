@@ -3,8 +3,7 @@ package company.tap.nfcreader.internal;
 import android.app.Application;
 import android.util.Log;
 
-import com.flurry.android.FlurryAgent;
-import com.flurry.android.FlurryPerformance;
+
 
 import company.tap.nfcreader.BuildConfig;
 
