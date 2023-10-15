@@ -1,6 +1,6 @@
 package company.tap.nfcreader.internal;
 
-import com.flurry.android.FlurryAgent;
+//import com.flurry.android.FlurryAgent;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class AnalyticsHelper {
      * @param timed         <code>true</code> if the event should be timed, false otherwise
      */
     public static void logEvent(String eventName, Map<String, String> eventParams, boolean timed) {
-        FlurryAgent.logEvent(eventName, eventParams, timed);
+        //FlurryAgent.logEvent(eventName, eventParams, timed);
     }
     /**
      * Logs an error.
@@ -31,7 +31,7 @@ public class AnalyticsHelper {
      * @param throwable         a {@link Throwable} that describes the error
      */
     public static void logError(String errorId, String errorDescription, Throwable throwable) {
-        FlurryAgent.onError(errorId, errorDescription, throwable);
+       // FlurryAgent.onError(errorId, errorDescription, throwable);
     }
 
 }
