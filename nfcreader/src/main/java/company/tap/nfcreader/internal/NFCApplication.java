@@ -19,13 +19,13 @@ public class NFCApplication extends  Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        new FlurryAgent.Builder()
+        /*new FlurryAgent.Builder()
                 .withDataSaleOptOut(false) //CCPA - the default value is false
                 .withCaptureUncaughtExceptions(true)
                 .withIncludeBackgroundSessionsInMetrics(true)
                 .withLogLevel(Log.VERBOSE)
                 .withPerformanceMetrics(FlurryPerformance.ALL)
-                .build(this, BuildConfig.FLURRY_API_KEY);
+                .build(this, BuildConfig.FLURRY_API_KEY);*/
 
     }
 

@@ -56,5 +56,7 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
     implementation 'commons-io:commons-io:2.14.0'
     // Required for Flurry Analytics integration
-    implementation 'com.flurry.android:analytics:12.2.0@aar'
+
+   // com.flurry.android:analytics version 12.2.0 has been marked as outdated by its author and will block publishing of your app to Play Console
+    //implementation 'com.flurry.android:analytics:12.2.0@aar'
 }
