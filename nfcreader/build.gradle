@@ -14,23 +14,18 @@ def getVersionName = { ->
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     //buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 1
         versionName getVersionName()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
-        Properties configProps = new Properties()
-        configProps.load(new FileInputStream(file('config.properties')))
-        def propertiesFlurrykey = configProps['FLURRY_API_KEY']
-        buildTypes.each {
-            it.buildConfigField 'String', 'FLURRY_API_KEY', propertiesFlurrykey
-        }
+
     }
 
     buildTypes {
@@ -47,16 +42,14 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'androidx.work:work-runtime-ktx:2.9.1'
     implementation 'commons-io:commons-io:2.14.0'
-    // Required for Flurry Analytics integration
 
-   // com.flurry.android:analytics version 12.2.0 has been marked as outdated by its author and will block publishing of your app to Play Console
-    //implementation 'com.flurry.android:analytics:12.2.0@aar'
+
 }
