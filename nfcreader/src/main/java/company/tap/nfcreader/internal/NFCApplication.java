@@ -5,7 +5,7 @@ import android.util.Log;
 
 
 
-import company.tap.nfcreader.BuildConfig;
+
 
 
 /**

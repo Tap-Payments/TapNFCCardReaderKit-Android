@@ -5,6 +5,7 @@ android {
 compileSdkVersion 34
     defaultConfig {
         applicationId "company.tap.tapnfccardreaderkit"
+        namespace "company.tap.tapnfccardreaderkit"
         minSdkVersion 21
         targetSdkVersion 34
         versionCode 1
