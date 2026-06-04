@@ -8,10 +8,10 @@ A SDK that provides an interface to scan cards using NFC.
 
 To use the SDK the following requirements must be met:
 
-1. **Android Studio 3.6** or newer
-2. **Android SDK Tools 29.0.0 ** or newer
-3. **Android Platform Version: API 29: Android 10.0 (Q)
-4. **Android targetSdkVersion: 29
+1. **Android Studio 2025.Patch.1 ** or newer
+2. **Android SDK Tools 34.0.0 ** or newer
+3. **Android Platform Version: API 34: Android 14 
+4. **Android targetSdkVersion: 34
 
 # Installation
 ---
@@ -49,8 +49,8 @@ Step 2. Add the dependency
 ```java
 	dependencies {
 
-           implementation "io.reactivex.rxjava2:rxjava:2.2.19"
-           implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+   api 'io.reactivex.rxjava3:rxjava:3.1.5'
+   api 'io.reactivex.rxjava3:rxandroid:3.0.2'
 	}
 ```
 ## Setup
