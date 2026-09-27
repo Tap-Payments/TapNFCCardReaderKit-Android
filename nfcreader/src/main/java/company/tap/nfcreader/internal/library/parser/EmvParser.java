@@ -364,8 +364,6 @@ public class EmvParser {
 	 */
 	protected boolean parse(final byte[] pSelectResponse, final IProvider pProvider) throws CommunicationException {
 		boolean ret = false;
-		// Get TLV log entry
-		byte[] logEntry = getLogEntry(pSelectResponse);
 		// Get PDOL
 		byte[] pdol = TlvUtil.getValue(pSelectResponse, EmvTags.PDOL);
 		// Send GPO Command
@@ -383,8 +381,9 @@ public class EmvParser {
 		// Extract commons card data (number, expire date, ...)
 		if (extractCommonsCardData(gpo)) {
 
-			// Extract log entry
-			card.setListTransactions(extractLogEntry(logEntry));
+			// Transaction history can require many APDUs and is unrelated to the
+			// public card details.  Do not read it during a tap-to-read operation.
+			card.setListTransactions(new ArrayList<EmvTransactionRecord>());
 			ret = true;
 		}
 
@@ -428,9 +427,7 @@ public class EmvParser {
 					// Extract card data
 					if (ResponseUtils.isSucceed(info)) {
 						extractCardHolderName(info);
-						if (TrackUtils.extractTrack2Data(card, info)) {
-							return true;
-						}
+						TrackUtils.extractTrack2Data(card, info);
 					}
 				}
 			}
@@ -531,12 +528,18 @@ public class EmvParser {
 	 */
 	protected void extractCardHolderName(final byte[] pData) {
 		// Extract Card Holder name (if exist)
-		byte[] cardHolderByte = TlvUtil.getValue(pData, EmvTags.CARDHOLDER_NAME);
+		byte[] cardHolderByte = TlvUtil.getValue(pData, EmvTags.CARDHOLDER_NAME_EXTENDED);
+		if (cardHolderByte == null) {
+			cardHolderByte = TlvUtil.getValue(pData, EmvTags.CARDHOLDER_NAME);
+		}
 		if (cardHolderByte != null) {
-			String[] name = StringUtils.split(new String(cardHolderByte).trim(), CARD_HOLDER_NAME_SEPARATOR);
+			String[] name = new String(cardHolderByte).trim().split(CARD_HOLDER_NAME_SEPARATOR, 2);
 			if (name != null && name.length == 2) {
+				// EMV tag 5F20/9F0B uses SURNAME/GIVEN NAMES.
+				card.setHolderLastname(StringUtils.trimToNull(name[0]));
+				card.setHolderFirstname(StringUtils.trimToNull(name[1]));
+			} else if (name != null && name.length == 1) {
 				card.setHolderFirstname(StringUtils.trimToNull(name[0]));
-				card.setHolderLastname(StringUtils.trimToNull(name[1]));
 			}
 		}
 	}

@@ -153,6 +153,20 @@ public class TapEmvCard extends AbstractData {
 	}
 
 	/**
+	 * Returns the issuer-provided cardholder name in display order.
+	 * This can be null because many contactless cards deliberately do not expose it.
+	 */
+	public String getCardholderName() {
+		if (holderFirstname == null) {
+			return holderLastname;
+		}
+		if (holderLastname == null) {
+			return holderFirstname;
+		}
+		return holderFirstname + " " + holderLastname;
+	}
+
+	/**
 	 * Method used to get the field cardNumber
 	 *
 	 * @return the cardNumber

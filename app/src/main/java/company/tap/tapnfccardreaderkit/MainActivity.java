@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         cardreadContent.setVisibility(View.VISIBLE);
         cardnumberText.setText(emvCard.getCardNumber());
         expiredateText.setText(DateFormat.format("M/y", emvCard.getExpireDate()));
-        cardHolderNameText.setText(emvCard.getHolderFirstname());
+        cardHolderNameText.setText(emvCard.getCardholderName());
         cardType.setText(emvCard.getApplicationLabel());
         mProgressDialog.dismiss();
     }

@@ -14,12 +14,12 @@ def getVersionName = { ->
 }
 
 android {
-    compileSdkVersion 34
+    compileSdkVersion 35
     //buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 1
         versionName getVersionName()
         namespace "company.tap.nfcreader"
@@ -39,17 +39,13 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api 'io.reactivex.rxjava3:rxjava:3.1.5'
-    api 'io.reactivex.rxjava3:rxandroid:3.0.2'
-    api 'org.apache.commons:commons-lang3:3.12.0'
-    api 'androidx.appcompat:appcompat:1.4.1'
-    api 'com.google.android.material:material:1.4.0'
-    api "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    api 'androidx.work:work-runtime-ktx:2.9.1'
-    api 'commons-io:commons-io:2.14.0'
+    // RxJava is part of the public API (readCardRx1/readCardRx2).
+    api 'io.reactivex.rxjava3:rxjava:3.1.10'
+    implementation 'androidx.annotation:annotation:1.9.1'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
 
 }
